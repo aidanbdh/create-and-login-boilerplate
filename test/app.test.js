@@ -2,7 +2,7 @@
 
 const { expect } = require('chai')
 const request = require('request')
-const app = require('../server/router.js')
+const app = require('../server/app.js')
 
 describe('server', () => {
 
@@ -20,7 +20,7 @@ describe('server', () => {
 
     it('returns a response', done => {
       request.get('http://localhost:3001', { json: true }, (err, res, body) => {
-        expect(err).to.equal(false)
+        expect(err).to.equal(null)
         expect(res.statusCode).to.equal(200)
         expect(body).to.include('html')
         done()
@@ -35,12 +35,13 @@ describe('server', () => {
       const options = {
         json: true,
         'content-type': 'application/json',
-        body: JSON.stringify({ email: 'test@test.info', name: 'test' })
+        body: { email: 'test@test.info' }
       }
       request.post('http://localhost:3001/login', options, (err, res, body) => {
-        expect(err).to.equal(false)
+        expect(err).to.equal(null)
         expect(res.statusCode).to.equal(200)
-        expect(body).to.equal({ name: 'test' })
+        expect(body).to.deep.equal({ email: 'test@test.info', name: 'test' })
+        done()
       })
     })
 
